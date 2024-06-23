@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Dog Image</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .container button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .container button:hover {
+            background-color: #0056b3;
+        }
+        .dog-image {
+            margin-top: 20px;
+        }
+        .dog-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Random Dog Image</h1>
+        <button onclick="fetchDogImage()">Get Random Dog Image</button>
+        <div class="dog-image" id="dog-image"></div>
+    </div>
+
+    <script>
+        async function fetchDogImage() {
+            const url = 'https://dog.ceo/api/breeds/image/random';
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                if (data.status === "success") {
+                    document.getElementById('dog-image').innerHTML = `
+                        <img src="${data.message}" alt="Random Dog Image">
+                    `;
+                } else {
+                    document.getElementById('dog-image').innerHTML = `<p>Failed to fetch dog image</p>`;
+                }
+            } catch (error) {
+                document.getElementById('dog-image').innerHTML = `<p>Error fetching dog image</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
