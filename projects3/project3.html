@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -89,6 +89,139 @@
                 }
             } catch (error) {
                 document.getElementById('weather-info').innerHTML = `<p>Error fetching weather data</p>`;
+            }
+        }
+    </script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App & Users</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #6dd5fa, #2980b9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            background: #ffffffc9;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+        .container input {
+            padding: 10px;
+            width: 80%;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        .container button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .container button:hover {
+            background-color: #0056b3;
+        }
+        .weather-card, .user-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 300px;
+            margin: 20px auto;
+        }
+        .weather-card h2, .user-card h3 {
+            margin: 0;
+        }
+        .weather-card p, .user-card p {
+            margin: 5px 0;
+        }
+        .users-container {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Weather App</h1>
+        <input type="text" id="city" placeholder="Enter city name">
+        <button onclick="getWeather()">Get Weather</button>
+        <div class="weather-info" id="weather-info"></div>
+    </div>
+    <div class="container">
+        <h1>User List</h1>
+        <button onclick="getUsers()">Fetch Users</button>
+        <div class="users-container" id="users-container"></div>
+    </div>
+
+    <script>
+        async function getWeather() {
+            const apiKey = 'ef0501e81c8f46efaa4162015242306'; // Replace with your WeatherAPI key
+            const city = document.getElementById('city').value;
+            const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${city}`;
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                if (response.ok) {
+                    document.getElementById('weather-info').innerHTML = `
+                        <div class="weather-card">
+                            <h2>${data.location.name}</h2>
+                            <p>Temperature: ${data.current.temp_c} °C</p>
+                            <p>Weather: ${data.current.condition.text}</p>
+                        </div>
+                    `;
+                } else {
+                    document.getElementById('weather-info').innerHTML = `<p>${data.error.message}</p>`;
+                }
+            } catch (error) {
+                document.getElementById('weather-info').innerHTML = `<p>Error fetching weather data</p>`;
+            }
+        }
+
+        async function getUsers() {
+            const url = 'https://jsonplaceholder.typicode.com/users'; // Replace with your user API endpoint
+
+            try {
+                const response = await fetch(url);
+                const users = await response.json();
+                const usersContainer = document.getElementById('users-container');
+                usersContainer.innerHTML = '';
+                users.forEach(user => {
+                    const userCard = document.createElement('div');
+                    userCard.className = 'user-card';
+                    userCard.innerHTML = `
+                        <h3>${user.name}</h3>
+                        <p>Email: ${user.email}</p>
+                        <p>Phone: ${user.phone}</p>
+                    `;
+                    usersContainer.appendChild(userCard);
+                });
+            } catch (error) {
+                document.getElementById('users-container').innerHTML = `<p>Error fetching user data</p>`;
             }
         }
     </script>
